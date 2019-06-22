@@ -4,41 +4,74 @@ html(lang="en")
         meta(charset="UTF-8")
         meta(name="viewport", content="width=device-width, initial-scale=1.0")
         meta(http-equiv="X-UA-Compatible", content="ie=edge")
-        link(rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous")
-        script(src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous")
         script(src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous")
         script(src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous")
+        link(rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous")
+        script(src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous")
         title Document
     body(class="bg-secondary")
-        form(action="/eraseUser" method="DELETE" class="w-75 mx-auto")
-            table(class="table-stripped table table-dark mt-3")
-                thead(class="thead-light text-center")
+        table(class="table-stripped table w-75 mx-auto table-dark mt-3")
+            thead(class="thead-light text-center")
+                if data[0]    
                     tr
                         th Select
-                        each val,key in data[0]
-                            th= key
-                tbody
+                            each val,key in data[0]
+                                th= key
+            tbody
+                if data[0]
                     each val,key in data
                         tr
                             td
-                                input(type="checkbox")
+                                input(type="checkbox" id=key)
                             each value,id in val
                                 td= value
-            button(class="btn btn-danger mx-auto") Delete
-        div(class="container mt-5")
-            form(action="/postData" method="POST" class="bg-dark row mx-auto p-5")  
-                input(type="text" placeholder="Titre" class="col-4 form-control " name="title")
-                input(type="text" placeholder="Image" class="col-4 form-control " name="image")
-                input(type="text" placeholder="Genre" class="col-4 form-control " name="genre")
-                input(type="text" placeholder="Trailer" class="col-4 form-control " name="trailer")
-                input(type="text" placeholder="Réalisateur" class="col-4 form-control " name="director")
-                input(type="number" placeholder="Prix" class="col-4 form-control " name="price")
-                textarea(name="description" placeholder="Description" class=" col-12 form-control" cols="30" rows="10")
-                input(type="text" placeholder="Acteurs" class="form-control " name="actors")
-                div(class="col-6 mt-3 text-center")
-                    label(class="text-white" for="choice") Film : 
-                    input(type="radio" class="w-auto ml-2 col-4" name="choice")
-                div(class="col-6 mt-3 text-center")
-                    label(class="text-white" for="choice") Serie :   
-                    input(type="radio" placeholder="" class="col-4 w-auto ml-2" name="choice")
-                input(type="submit" value='Insérer le film' class="mx-auto mt-4 btn btn-success col-4 w-auto ml-2")
+        div(class="w-75 mx-auto")
+            if data[0]
+                button(class="btn btn-danger mx-auto" id="deleteButton") Delete
+        template(id="link-tpl") 
+            a(class="nav-item nav-link bg-light" data-toggle="tab" role="tab" aria-selected="false") No title
+        template(id="form-tpl")
+            div(class="tab-pane fade" role="tabpanel")
+                    form(action="/postData" method="POST" class="bg-dark row mx-auto p-5" required)  
+                        input(type="text" id="title" placeholder="Titre" class="col-4 form-control" name="title" required)
+                        input(type="text" placeholder="Image" class="col-4 form-control" name="image" required)
+                        input(type="text" placeholder="Genre" class="col-4 form-control" name="genre" required)
+                        input(type="text" placeholder="Trailer" class="col-4 form-control" name="trailer" required)
+                        input(type="text" placeholder="Réalisateur" class="col-4 form-control" name="director" required)
+                        input(type="number" placeholder="Prix" class="col-4 form-control" name="price" required)
+                        textarea(name="description" placeholder="Description" class=" col-12 form-control" cols="30" rows="10" required)
+                        input(type="text" placeholder="Acteurs" class="form-control" name="actors" required)
+                        div(class="col-6 mt-3 text-center")
+                            label(class="text-white" for="choice") Film : 
+                            input(type="radio" value="Film" class="w-auto ml-2 col-4" name="choice" required)
+                        div(class="col-6 mt-3 text-center")
+                            label(class="text-white" for="choice") Serie :   
+                            input(type="radio" value="Serie" placeholder="" class="col-4 w-auto ml-2" name="choice" required)
+                        input(type="submit" value='Insérer le film' class="mx-auto mt-4 btn btn-success col-4 w-auto ml-2" required)
+
+        nav(class="w-75 mx-auto mt-5")
+            div(class="nav nav-tabs" id="nav-tab" role="tablist")
+                a(class="nav-item nav-link active bg-light" id='tab0-tab' data-toggle="tab" href="#tab0" role="tab" aria-controls="tab0" aria-selected="true") No title
+                a(href="#" id="add" class="btn btn-warning") +
+            div
+                div(class="tab-content" id="nav-content")
+                    div(class="tab-pane fade show active" id="tab0" role="tabpanel" aria-labelledby="tab0-tab")
+                        form(action="/postData" method="POST" class="bg-dark row mx-auto p-5" required)  
+                            input(type="text" id='title' placeholder="Titre" class="col-4 form-control" name="title" required)
+                            input(type="text" placeholder="Image" class="col-4 form-control" name="image" required)
+                            input(type="text" placeholder="Genre" class="col-4 form-control" name="genre" required)
+                            input(type="text" placeholder="Trailer" class="col-4 form-control" name="trailer" required)
+                            input(type="text" placeholder="Réalisateur" class="col-4 form-control" name="director" required)
+                            input(type="number" placeholder="Prix" class="col-4 form-control" name="price" required)
+                            textarea(name="description" placeholder="Description" class="col-12 form-control" cols="30" rows="10" required)
+                            input(type="text" placeholder="Acteurs" class="form-control" name="actors" required)
+                            div(class="col-6 mt-3 text-center")
+                                label(class="text-white" for="choice") Film : 
+                                input(type="radio" value="Film" class="w-auto ml-2 col-4" name="choice" required)
+                            div(class="col-6 mt-3 text-center")
+                                label(class="text-white" for="choice") Serie :   
+                                input(type="radio" value="Serie" placeholder="" class="col-4 w-auto ml-2" name="choice" required)
+                            input(type="submit" value='Insérer le film' class="mx-auto mt-4 btn btn-success col-4 w-auto ml-2" required)
+
+    script(src="/socket.io/socket.io.js")
+    script(src="js/client.js")
