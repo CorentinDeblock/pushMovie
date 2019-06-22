@@ -1,0 +1,15 @@
+.form-insert {
+  position: fixed;
+  top: -72%;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+  background-color: #313531;
+  -webkit-transition: top 1s ease-out;
+  transition: top 1s ease-out;
+}
+
+.form-top-anim {
+  top: 0%;
+}
+/*# sourceMappingURL=style.css.map */

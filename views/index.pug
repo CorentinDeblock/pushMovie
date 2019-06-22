@@ -8,9 +8,10 @@ html(lang="en")
         script(src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous")
         link(rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous")
         script(src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous")
+        link(href="css/style.css" rel="stylesheet")
         title Document
     body(class="bg-secondary")
-        table(class="table-stripped table w-75 mx-auto table-dark mt-3")
+        table(class="table-stripped table w-75 mx-auto table-dark mt-5")
             thead(class="thead-light text-center")
                 if data[0]    
                     tr
@@ -22,7 +23,7 @@ html(lang="en")
                     each val,key in data
                         tr
                             td
-                                input(type="checkbox" id=key)
+                                input(type="checkbox" id=key+1)
                             each value,id in val
                                 td= value
         div(class="w-75 mx-auto")
@@ -32,7 +33,7 @@ html(lang="en")
             a(class="nav-item nav-link bg-light" data-toggle="tab" role="tab" aria-selected="false") No title
         template(id="form-tpl")
             div(class="tab-pane fade" role="tabpanel")
-                    form(action="/postData" method="POST" class="bg-dark row mx-auto p-5" required)  
+                    form(action="#" class="bg-dark row mx-auto p-5" required)  
                         input(type="text" id="title" placeholder="Titre" class="col-4 form-control" name="title" required)
                         input(type="text" placeholder="Image" class="col-4 form-control" name="image" required)
                         input(type="text" placeholder="Genre" class="col-4 form-control" name="genre" required)
@@ -47,16 +48,15 @@ html(lang="en")
                         div(class="col-6 mt-3 text-center")
                             label(class="text-white" for="choice") Serie :   
                             input(type="radio" value="Serie" placeholder="" class="col-4 w-auto ml-2" name="choice" required)
-                        input(type="submit" value='Insérer le film' class="mx-auto mt-4 btn btn-success col-4 w-auto ml-2" required)
 
-        nav(class="w-75 mx-auto mt-5")
+        nav(class="w-75 form-insert" id="insert-content")
             div(class="nav nav-tabs" id="nav-tab" role="tablist")
                 a(class="nav-item nav-link active bg-light" id='tab0-tab' data-toggle="tab" href="#tab0" role="tab" aria-controls="tab0" aria-selected="true") No title
                 a(href="#" id="add" class="btn btn-warning") +
             div
                 div(class="tab-content" id="nav-content")
                     div(class="tab-pane fade show active" id="tab0" role="tabpanel" aria-labelledby="tab0-tab")
-                        form(action="/postData" method="POST" class="bg-dark row mx-auto p-5" required)  
+                        form(action="#" class="bg-dark row mx-auto p-5" required)  
                             input(type="text" id='title' placeholder="Titre" class="col-4 form-control" name="title" required)
                             input(type="text" placeholder="Image" class="col-4 form-control" name="image" required)
                             input(type="text" placeholder="Genre" class="col-4 form-control" name="genre" required)
@@ -71,7 +71,8 @@ html(lang="en")
                             div(class="col-6 mt-3 text-center")
                                 label(class="text-white" for="choice") Serie :   
                                 input(type="radio" value="Serie" placeholder="" class="col-4 w-auto ml-2" name="choice" required)
-                            input(type="submit" value='Insérer le film' class="mx-auto mt-4 btn btn-success col-4 w-auto ml-2" required)
-
+            div(class="w-100 text-center")
+                button(id="send" class="btn btn-success mb-3 mt-4") Envoyer les formulaire
+            button(id="open-form" class="btn btn w-100 btn-light") Ouvrir le formulaire
     script(src="/socket.io/socket.io.js")
     script(src="js/client.js")

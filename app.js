@@ -28,36 +28,6 @@ app.get("/",(req,res) => {
     })
 })
 
-app.post("/postData",(req,res) => {
-    console.log("I'm here")
-    let incoming = new form.IncomingForm();
-    incoming.parse(req,(err,fields,files) => {
-        repo.contents("movieTemplate.json","movie",(err,data) => {
-            let content = Buffer.from(data.content,data.encoding);
-            let jsObj = JSON.parse(content);
-            let sha = data.sha;
-            let formatedData = []
-
-            jsObj.unshift(fields);
-            for(let i = 0; i < jsObj.length;i++){
-                if(i == 0){
-                    let newObj = {};
-                    newObj.id = i + 1;
-                    Object.assign(newObj,jsObj[i]);
-                    formatedData.push(newObj);
-                }else{
-                    jsObj[i].id = i + 1;
-                    formatedData.push(jsObj[i]);
-                }
-            }
-            console.log(formatedData);
-            repo.updateContents("movieTemplate.json","Test de api",JSON.stringify(formatedData),sha,"movie",(err,path) => {
-                res.redirect("/")
-            })
-        })
-    })
-})
-
 io.on("connection",(socket) => {
     console.log("connected");
     socket.on("deleted user",(message) => {
@@ -65,14 +35,50 @@ io.on("connection",(socket) => {
             let content = Buffer.from(data.content,data.encoding);
             let jsObj = JSON.parse(content);
             let sha = data.sha;
+            let deletedData = [];
 
-            for(let i = 0; i < message.length;i++){
-                jsObj = jsObj.filter((value) => {
-                    return value.id == message[i]; 
-                })
+            for(let i = 0; i < jsObj.length;i++){
+                let pushData = true;
+                for(let j = 0; j < message.length;j++){
+                    if(jsObj[i].id == message[j]){
+                        pushData = false;
+                    }
+                }
+                if(pushData) {
+                    jsObj[i].id = deletedData.length + 1;
+                    deletedData.push(jsObj[i]);
+                }
             }
-            repo.updateContents("movieTemplate.json","Test de api",JSON.stringify(jsObj),sha,"movie",(err,path) => {
-                socket.emit("update table","Objet supprimer")
+
+            repo.updateContents("movieTemplate.json","Test de api",JSON.stringify(deletedData),sha,"movie",(err,path) => {
+                io.emit("update table","Objet supprimer")
+            })
+        })
+    })
+    socket.on("send data",(message) => {
+        repo.contents("movieTemplate.json","movie",(err,data) => {
+            let content = Buffer.from(data.content,data.encoding);
+            let jsObj = JSON.parse(content);
+            let sha = data.sha;
+
+            let formatedData = []
+
+            for(let j of message){
+                jsObj.push(j);
+            }
+
+            for(let i = 0; i < jsObj.length;i++){
+                if(jsObj[i].id != undefined){
+                    jsObj[i].id = i + 1
+                    formatedData.push(jsObj[i])
+                }else{  
+                    formatedData.push(Object.assign({id:i+1},jsObj[i]));
+                }
+            }
+
+            console.log(formatedData);
+            repo.updateContents("movieTemplate.json","Test de api",JSON.stringify(formatedData),sha,"movie",(err,path) => {
+                io.emit("update table","Objet Inséré")
             })
         })
     })

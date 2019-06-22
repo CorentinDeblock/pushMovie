@@ -1,0 +1,11 @@
+.form-insert{
+    position: fixed;
+    top:-72%;
+    left:50%;
+    transform: translateX(-50%);
+    background-color:#313531;
+    transition: top 1s ease-out;
+}
+.form-top-anim{
+    top:0%;
+}
