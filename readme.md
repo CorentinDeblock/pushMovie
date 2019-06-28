@@ -101,7 +101,7 @@ localhost:8080
 
 Et si vous êtes acceuilli par ce formulaire
 
-[formulaire](assets/image/formImage.png)
+(assets/image/formImage.png)
 
 Alors tout a bien fonctionné et vous êtes prêt a ajouté des données.
 
