@@ -64,6 +64,7 @@ class FormMotor {
             for(let i of tabPane){
                 let data = {};
                 for(let j of i.children){
+
                     if(j.tagName == "DIV"){
                         for(let k of j.children){
                             if(k.tagName != "LABEL"){
@@ -73,7 +74,13 @@ class FormMotor {
                             }
                         }
                     }else{
-                        data[j.name] = j.value;
+                        if(j.value.indexOf(", ") != -1){
+                            data[j.name] = j.value.split(", ")
+                        }else if(j.value.indexOf(",") != -1){
+                            data[j.name] = j.value.split(",")
+                        }else{
+                            data[j.name] = j.value;
+                        }
                     }
                 }
                 newArray.push(data);

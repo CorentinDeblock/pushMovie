@@ -9,8 +9,10 @@ html(lang="en")
         link(rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous")
         script(src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous")
         link(href="css/style.css" rel="stylesheet")
+        script(src="https://kit.fontawesome.com/08a7931cbe.js")
         title Document
     body(class="bg-secondary")
+        h2(class="text-center pt-5 text-white") Liste des données
         table(class="table-stripped table w-75 mx-auto table-dark mt-5")
             thead(class="thead-light text-center")
                 if data[0]    
@@ -24,16 +26,14 @@ html(lang="en")
                         tr
                             td
                                 input(type="checkbox" id=key+1)
-                            each value,id in val
-                                td= value
-        div(class="w-75 mx-auto")
-            if data[0]
-                button(class="btn btn-danger mx-auto" id="deleteButton") Delete
+                            each value,idVal in val
+                                td
+                                    div(id=idVal)=value
         template(id="link-tpl") 
             a(class="nav-item nav-link bg-light" data-toggle="tab" role="tab" aria-selected="false") No title
         template(id="form-tpl")
             div(class="tab-pane fade" role="tabpanel")
-                    form(action="#" class="bg-dark row mx-auto p-5" required)  
+                    form(action="#" class="bg-dark row mx-auto p-5")  
                         input(type="text" id="title" placeholder="Titre" class="col-4 form-control" name="title" required)
                         input(type="text" placeholder="Image" class="col-4 form-control" name="image" required)
                         input(type="text" placeholder="Genre" class="col-4 form-control" name="genre" required)
@@ -56,7 +56,7 @@ html(lang="en")
             div
                 div(class="tab-content" id="nav-content")
                     div(class="tab-pane fade show active" id="tab0" role="tabpanel" aria-labelledby="tab0-tab")
-                        form(action="#" class="bg-dark row mx-auto p-5" required)  
+                        form(action="#" class="bg-dark row mx-auto p-5")  
                             input(type="text" id='title' placeholder="Titre" class="col-4 form-control" name="title" required)
                             input(type="text" placeholder="Image" class="col-4 form-control" name="image" required)
                             input(type="text" placeholder="Genre" class="col-4 form-control" name="genre" required)
@@ -73,6 +73,9 @@ html(lang="en")
                                 input(type="radio" value="Serie" placeholder="" class="col-4 w-auto ml-2" name="choice" required)
             div(class="w-100 text-center")
                 button(id="send" class="btn btn-success mb-3 mt-4") Envoyer les formulaire
-            button(id="open-form" class="btn btn w-100 btn-light") Ouvrir le formulaire
+        div(class="buttons")
+            if data[0]
+                button(class="btn btn-danger mx-auto fas fa-trash" id="deleteButton")
+            button(id="open-form" class="btn btn-light fas fa-address-card")
     script(src="/socket.io/socket.io.js")
     script(src="js/client.js")

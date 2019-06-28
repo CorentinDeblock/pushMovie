@@ -1,11 +1,66 @@
 .form-insert{
     position: fixed;
-    top:-72%;
+    top:-100%;
     left:50%;
     transform: translateX(-50%);
     background-color:#313531;
     transition: top 1s ease-out;
+    border-radius : 0px 0px 10px 10px; 
+    box-shadow: 0px 0px 10px 2px white;
 }
 .form-top-anim{
     top:0%;
+}
+.buttons{
+    position: fixed;
+    top:0%;
+    left: 3%;
+}
+table{
+    div{
+        height: 125px;
+        width: 140px;
+        overflow: hidden;
+        text-align: center;
+        &[id="trailer"]{
+            overflow-x: scroll;
+            scrollbar-color: grey transparent;
+            scrollbar-width: thin;
+        }
+        &[id="description"]{
+            overflow-y: scroll;
+            scrollbar-color: grey transparent;
+            scrollbar-width: thin;
+        }
+        &[id="actors"]{
+            overflow-y:scroll;
+            scrollbar-color: grey transparent;
+            scrollbar-width: thin;
+        }
+    }
+    td{
+        text-align: center;
+    }
+    
+}
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: transparent; 
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: grey;
+    border-radius: 10px;
+    border: 2px solid #0009;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #555; 
 }
