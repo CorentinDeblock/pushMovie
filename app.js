@@ -73,7 +73,7 @@ fs.readFile("login.json",(err,data) => {
                             }
                 
                             repo.updateContents(jsonObj.file,"Test de api",JSON.stringify(deletedData),sha,jsonObj.branch,(err,path) => {
-                                io.emit("update table","Objet supprimer")
+                                socket.emit("update table","Objet supprimer")
                             })
                         })
                     })
@@ -82,26 +82,35 @@ fs.readFile("login.json",(err,data) => {
                             let content = Buffer.from(data.content,data.encoding);
                             let jsObj = JSON.parse(content);
                             let sha = data.sha;
-                
+                            let commit = "";
                             let formatedData = []
-
-                            for(let j of message){
-                                jsObj.push(j);
+                            
+                            for(let i in message){
+                                let newObj = {}
+                                for(let j in message[i]){
+                                    if(j == 'commit'){
+                                        commit = message[i][j]
+                                    }else{
+                                        newObj[j] = message[i][j]
+                                    }
+                                }
+                                jsObj.push(newObj);
                             }
                 
                             for(let i = 0; i < jsObj.length;i++){
                                 if(jsObj[i].id != undefined){
                                     jsObj[i].id = i + 1
                                     formatedData.push(jsObj[i])
-                                }else{  
+                                }
+                                else{  
                                     formatedData.push(Object.assign({id:i+1},jsObj[i]));
                                 }
                             }
                 
-                            console.log(formatedData);
-                            repo.updateContents(jsonObj.file,"Test de api",JSON.stringify(formatedData),sha,jsonObj.branch,(err,path) => {
-                                io.emit("update table","Objet Inséré")
+                            repo.updateContents(jsonObj.file,commit,JSON.stringify(formatedData),sha,jsonObj.branch,(path) => {
+                                socket.emit("update table","Objet inséré")
                             })
+                            
                         })
                     })
                 })

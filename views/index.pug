@@ -12,6 +12,8 @@ html(lang="en")
         script(src="https://kit.fontawesome.com/08a7931cbe.js")
         title Document
     body(class="bg-secondary")
+        div(id="loader" class="loader fade")
+            h1(class="text-white element-loader") loading...
         h2(class="text-center pt-5 text-white") Liste des données
         table(class="table-stripped table w-75 mx-auto table-dark mt-5")
             thead(class="thead-light text-center")
@@ -54,6 +56,7 @@ html(lang="en")
                 a(class="nav-item nav-link active bg-light" id='tab0-tab' data-toggle="tab" href="#tab0" role="tab" aria-controls="tab0" aria-selected="true") No title
                 a(href="#" id="add" class="btn btn-warning") +
             div
+                div(id="error-log" class="my-2" class="text-danger text-center")
                 div(class="tab-content" id="nav-content")
                     div(class="tab-pane fade show active" id="tab0" role="tabpanel" aria-labelledby="tab0-tab")
                         form(action="#" class="bg-dark row mx-auto p-5")  
@@ -72,6 +75,7 @@ html(lang="en")
                                 label(class="text-white" for="choice") Serie :   
                                 input(type="radio" value="Serie" placeholder="" class="col-4 w-auto ml-2" name="choice" required)
             div(class="w-100 text-center")
+                textarea(id="commit" name="commitMessage" placeholder="Votre commit" class="form-control m-auto special-area" rows="10")
                 button(id="send" class="btn btn-success mb-3 mt-4") Envoyer les formulaire
         div(class="buttons")
             if data[0]

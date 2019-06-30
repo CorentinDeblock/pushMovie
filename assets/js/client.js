@@ -10,6 +10,11 @@ class FormMotor {
         this.navTab = document.getElementById("nav-tab");
         this.formButton = document.getElementById("open-form");
         this.insertContent = document.getElementById("insert-content");
+        this.commitInsert = document.getElementById('commit');
+        this.errorLog = document.getElementById("error-log");
+        this.loader = document.getElementById("loader");
+        console.log(this.errorLog);
+        this.canPush = false;
     }
     link() {
         for(let i = 0; i < this.navTab.children.length - 1;i++){
@@ -56,36 +61,59 @@ class FormMotor {
             this.link();
         })
     }
-
+    addError(message){
+        let p = document.createElement('p');
+        p.innerText = message;
+        this.errorLog.appendChild(p); 
+        this.canPush = false;
+    }
     send() {
         document.getElementById("send").addEventListener("click",() => {
             let tabPane = this.navContent.querySelectorAll("form");
             let newArray = [];
-            for(let i of tabPane){
-                let data = {};
-                for(let j of i.children){
+            let data = {};
+            this.errorLog.innerHTML = ""
 
-                    if(j.tagName == "DIV"){
-                        for(let k of j.children){
-                            if(k.tagName != "LABEL"){
-                                if(k.checked){
-                                    data[k.name] = k.value;
+            for(let i of tabPane){
+                if(i.reportValidity()){
+                    this.canPush = true;
+                    for(let j of i.children){
+        
+                        if(j.tagName == "DIV"){
+                            for(let k of j.children){
+                                if(k.tagName != "LABEL"){
+                                    if(k.checked){
+                                        data[k.name] = k.value;
+                                    }
                                 }
                             }
-                        }
-                    }else{
-                        if(j.value.indexOf(", ") != -1){
-                            data[j.name] = j.value.split(", ")
-                        }else if(j.value.indexOf(",") != -1){
-                            data[j.name] = j.value.split(",")
                         }else{
-                            data[j.name] = j.value;
+                            if(j.value.indexOf(", ") != -1){
+                                data[j.name] = j.value.split(", ")
+                            }else if(j.value.indexOf(",") != -1){
+                                data[j.name] = j.value.split(",")
+                            }else{
+                                data[j.name] = j.value;
+                            }
                         }
                     }
+                    if(this.commitInsert.value != ""){
+                        data["commit"] = this.commitInsert.value;
+                    }else{
+                        this.addError("Veuillez indiquez un message dans le commit");
+                        break;
+                    }
+
+                    newArray.push(data);
+                }else{
+                    this.canPush = false;
+                    break;
                 }
-                newArray.push(data);
             }
-            socket.emit("send data",newArray);
+            if(this.canPush){
+                socket.emit("send data",newArray); 
+                this.loader.classList.add("show");
+            } 
         })
     }
 
@@ -116,6 +144,7 @@ if(document.getElementById("deleteButton") != undefined){
             }
         }
         socket.emit("deleted user",ids);
+        this.loader.classList.add("show");
     })
 }
 socket.on("update table",(message) =>{
